@@ -1,0 +1,341 @@
+
+\documentclass{assignment-263}
+\usepackage{cancel}
+\anum{1}
+\course{CSC263}
+\duedate{January 28, 2019}
+\filename{ps1sol.pdf, ps1sol.tex, moving\_min.py}
+
+\begin{document}
+\think
+\begin{enumerate}
+\item \textbf{[4]}
+Recall this code from lecture.
+
+\begin{python}
+Search42(L):
+  z = L.head
+  while z != None and z.key != 42:
+     z = z.next
+  return z
+\end{python}
+
+Rather than supposing that each key in the list is an integer chosen uniformly at random from 1 to 100, let's instead suppose that the list length $n$ is at least 42 and that the list keys are a random permutation of $1, 2, 3, \ldots, n$.
+
+Under these new assumptions, what is the expected number of times that line 3 is executed? 
+
+Give your answer in \textbf{exact form}, i.e., \textbf{not} in asymptotic
+		notations. Show your work!
+
+
+
+
+
+
+
+
+%%Write your solution here
+\vskip 5pt
+ $P(T=1) = \frac{1}{n}$
+
+ $P(T=2) = \overbrace{(\frac{n-1}{n})}^{\text{a number thats not 42}} \times \underbrace{(\frac{1}{n-1})}_{\text{42, but theres only (n-1) numbers left)}} = \frac{1}{n}$
+
+
+
+ $P(T=3) = (\frac{\cancel{n-1}}{n})(\frac{\cancel{n-2}}{\cancel{n-1}})(\frac{1}{\cancel{n-2}})  = \frac{1}{n}$
+
+$\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \vdots$
+
+ $P(T= n) = (\frac{\cancel{n-1}}{n})(\frac{\cancel{n-2}}{\cancel{n-1}})(\frac{\cancel{n-3}}{\cancel{n-2}})$\dots$( \frac{\cancel{n-(n-1})}{\cancel{n-(n-2)}})(\frac{1}{\cancel{n-(n-1)}})= \frac{1}{n}$
+\vskip 10pt
+
+Probability is $\frac{1}{n}$ for all of the samplespace.
+\vskip 5pt
+
+$E(T) = \sum_{t=1}^{n} (t)P(T=t)) $
+
+\ \ \ \ \ \ \ \ $  = \sum_{t=1}^{n} (t)(\frac{1}{n}) = \ \  \frac{1}{n} \sum_{t=1}^{n}t $
+
+\ \ \ \ \ \ \ \ $  =( \frac{1}{n})(\frac{n(n+1)}{2})= \frac{n+1}{2} $
+
+
+
+
+
+
+\item \textbf{[12]}
+		Consider the following algorithm that describes the procedure of a
+		casino game called ``\texttt{Survive263}''. The index of the array $A$ starts
+		at $0$. Let $n$ denote the length of $A$.
+
+\begin{python}
+   Survive263(A):
+      '''
+      Pre: A is a list of integers, len(A) > 263, and it is generated 
+           according to the distribution specified below.
+      '''
+      winnings = -5.00   # the player pays 5 dollars for each play
+      for i from n-1 downto 0:
+         winnings = winnings + 0.01  # winning 1 cent
+         if A[i] == 263:
+            print("Boom! Game Over.")
+            return winnings
+      print("You survived!")
+      return winnings
+\end{python}
+
+		The input array $A$ is generated in the following specific way: for
+		$A[0]$ we pick an integer from $\{0, 1\}$ uniformly at random; for
+		$A[1]$ we pick an integer from $\{0, 1, 2\}$ uniformly at random;
+		for $A[2]$ we pick an integer from $\{0, 1, 2, 3\}$ uniformly at
+		random, etc. That is, for $A[i]$ we pick  an integer from
+		$\{0,\ldots, i+1\}$ uniformly at random. All choices are independent
+		from each other. Now, let's analyse the player's expected winnings
+		from the game by answering the following questions. 
+		All your answers
+		should be in \textbf{exact form}, i.e., \textbf{not} in asymptotic
+		notations.
+
+		\begin{enumerate}[(a)]
+
+			\item Consider the case where the player \textbf{loses the most}
+				(i.e., minimum winnings), what is the return value of
+				\texttt{Survive263} in this case? What is the probability that this case
+				occurs? Justify your answer carefully: show your work and
+				explain your calculation.
+
+			\item Consider the case where the player \textbf{wins the most}
+				(i.e., maximum winnings), what is the return value of
+				\texttt{Survive263} in this case? What is the probability that this case
+				occurs? Justify your answer carefully: show your work and
+				explain your calculation.
+
+			\item Now consider the \textbf{average case}, what is the
+				\textbf{expected value} of the winnings of a player (i.e.,
+				the expected return value of \texttt{Survive263}) according to
+				the input distribution specified above? Justify your answer
+				carefully: show your work and explain your calculation.
+
+			\item Suppose that you are the owner of the casino and that you want to
+				determine a length of the input list $A$ so that the
+				expected winnings of a player is between $-1.01$ and $-0.99$
+				dollars (so that the casino is expected to make about 1
+				dollar from each play). What value could be picked for the
+				length of $A$? You are allowed to use math tools such as a
+				calculator or WolframAlpha to get your answer.
+		\end{enumerate}
+
+	\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+%%Write your solution here
+\vskip 5pt
+ 		(a) They lose the most if at A[262] they get 263. Len(A) = 264. $(261)(0.01) = 2.61$ Therefore the function has to run 261 times minumum.
+
+			
+\ \ \ \ \ \ \ \ \  $ P(263$ at $A[262]) = \frac{1}{265}$
+
+\ \ \ \ \ \ \ \ The return value is -2.39
+
+\vskip 5pt
+ 		(b) 263 appears as the last element at A[n-1] on a list of size n.
+
+\ \ \ \ \ \ \ \ \ \ \ \  returns 0.1n-5
+
+\ \ \ \ \ \ \ \  $P($this happens$) = (1-\frac{1}{n})^{n-1}\cdot(\frac{1}{n})$
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ $= (\frac{n-1}{n})^{n-1}\cdot(\frac{1}{n}) =  (\frac{n-1}{n})^{n}(\frac{n-1}{n})^{1}(\frac{1}{n})$
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =$  \frac{(n-1)^{n-1}}{(n)^n}$
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =$  (\frac{n-1}{n})^{n}(\frac{1}{n-1})$
+
+
+
+\vskip 5pt
+ 		(c) Probability we get no 236 from list position 262 to n-1 :
+
+\ \ \ \ \ \ \ \ \ \ \ $( \frac{{262}}{\cancel{263}})( \frac{\cancel{263}}{\cancel{264}})( \frac{\cancel{264}}{\cancel{265}}) \dots ( \frac{\cancel{n-2}}{\cancel{n-1}})(\frac{\cancel{n-1}}{{n}})$ = $( \frac{{262}}{{n}})$
+
+\ \ \ \ \  \ \ \ \ \ \ So the probability we get atleast one 263 is 1-$( \frac{{262}}{{n}})$
+
+\ \ \ \ \ \ \ \ In the case we get atleast one 263;we need the expected value of position of first 263 from right to left.
+
+\ \ \ \ \ \ \ \ If we get a 263 on our first position(right to left):
+
+\ \ \ \ \ \ \ \ \ \ \  $P(X= 1) =  ( \frac{{1}}{{n}}) $
+
+\ \ \ \ \ \ \ \ \ \ \  $P(X=2) = (\frac{\cancel{n-1}}{n})(\frac{{1}}{\cancel{n-1}})= \frac{1}{n}$
+
+$\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \vdots$
+
+\ \ \ \ \ \ \ \ \ \ \  $P(X= n-262) = (\frac{\cancel{n-1}}{n})(\frac{\cancel{n-2}}{\cancel{n-1}})$\dots$( \frac{\cancel{263})}{\cancel{264)}})(\frac{1}{\cancel{263}})= \frac{1}{n}$
+
+\ \ \ \ \ \ \ \ \ \ \ $E(X) = \sum_{x=1}^{n-262} (x)(\frac{1}{n}) $
+
+\ \ \ \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \ \ \ \ $  =\frac{1}{n} \sum_{x=1}^{n-262}(x)$
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ $= ( \frac{1}{n}) (\frac{(n-262)(n-261)}{2}) $
+
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ $  = \frac{(n-262)(n-261)}{2n} $
+
+\ \ \ \ \ \ \ \ \  Putting this all together:
+
+\ \ \ \ \ \ \ \ \ \ \ $E(W) = 0.01n\cdot(\frac{262}{n}) + 0.01\cdot (\frac{(n-262)(n-261)}{2n}) -5$
+
+\ \ \ \ \ \ \ \ \ \ \ $  = 2.62+ 0.01\cdot (\frac{(n-262)(n-261)}{2n}) -5$
+
+\ \ \ \ \ \ \ \ \ \ \ $  = -2.38+  (\frac{(n-262)(n-261)}{200n}) $
+
+\ \ \ \ \ \ \ \ \ \ \ $  = \frac{(n-262)(n-261)}{2n} $
+
+
+
+\vskip 5pt
+ 		(D) Finding a value of n for which the expected value is between -0.99 and -1:
+
+\ \ \ \ \ \ \ \ \ \ \ $  -2.38+  (\frac{(n-262)(n-261)}{200n}) = -1 $
+
+\ \ \ \ \ \ \ \ \ \ \ $  \frac{(n-262)(n-261)}{200n}  = 1.38$
+
+\ \ \ \ \ \ \ \ \ \ \ $   (n-262)(n-261)= 1.38 \cdot 200n $
+
+\ \ \ \ \ \ \ \ \ \ \ $  n^2-261n-262n+68382-276n = 0 $
+
+\ \ \ \ \ \ \ \ \ \ \ $ n^2 -799n +68382 = 0 $
+
+\ \ \ \ \ \ \ \ \ \ \ $ n = \frac{799}{2} +  \frac{\sqrt{364873}}{2}$
+
+\ \ \ \ \ \ \ \ \ \ \ $  n \approx 701.52 $
+
+\ \ \ \ \ \ \ \ \ \ \ if $n = 702: $
+
+\ \ \ \ \ \ \ \ \ \ \ $-2.38 + \frac{440\times441}{140400} = -09979487179$
+
+\ \ \ \ \ \ \ \ \ \ \ This value for n works, so we can use n = 702
+
+\vskip 10pt
+\vskip 10pt
+
+\program
+
+\begin{enumerate}
+\item[3.] \textbf{[12]} 
+In this question, you will solve the {\bf Moving Minimum Problem}. The function \verb|solve_moving_min| takes a list of commands that operate on the current collection of data; your task is to process the commands in order and return the required list of results. There are two kinds of commands: \verb|insert| commands and \verb|get_min| commands.
+
+An \verb|insert| command is a string of the form \verb|insert x|, where \verb|x| is an integer. (Note the space between \verb|insert| and \verb|x|.) This command adds \verb|x| to the collection.
+
+A \verb|get_min| command is simply the string \verb|get_min|. The first \verb|get_min| command results in the smallest element currently in the collection; the next \verb|get_min| command results in the second-smallest element currently in the collection; and so on. That is, the \verb|j|th \verb|get_min| command results in the \verb|j|th-smallest element in the collection at the time of the command. You can assume that the collection has at least \verb|j| elements at the time of the \verb|j|th \verb|get_min| command.
+
+Your goal is to implement \verb|insert| and \verb|get_min| each in $O(\lg n)$ time, where $n$ is the number of elements currently in the collection. The list returned by \verb|solve_moving_min| consists of the results, in order, from each \verb|get_min| command.
+
+Let's go through an example. Here is a sample call of \verb|solve_moving_min|:
+
+\begin{verbatim}
+solve_moving_min(
+  ['insert 10',
+   'get_min',
+   'insert 5',
+   'insert 2',
+   'insert 50',
+   'get_min',
+   'get_min',
+   'insert -5'
+  ])
+\end{verbatim}
+
+
+This corresponds to the following steps:
+\begin{itemize}
+\item The collection begins empty, with no elements.
+\item We insert 10. The collection contains just the integer 10.
+\item We then have our first \verb|get_min| command. The result is the smallest element currently in the collection, which is 10.
+\item We insert 5. The collection now contains 10 and 5.
+\item We insert 2. The collection now contains 10, 5, and 2.
+\item We insert 50. The collection now contains 10, 5, 2, and 50.
+\item Now we have our second \verb|get_min| command. The result is the second-smallest element currently in the collection, which is 5.
+\item Now we have our third \verb|get_min| command. The result is the third-smallest element currently in the collection, which is 10.
+\item We insert -5. The collection now contains 10, 5, 2, 50, and -5.
+\end{itemize}
+
+\verb|solve_moving_min| returns \verb|[10, 5, 10]| (the three values produced by the \verb|get_min| commands).
+   
+Requirements:
+\begin{itemize}
+\item Your code must be written in Python 3, and the filename must be \verb|moving_min.py|.
+\item We will grade only the \verb|solve_moving_min| function; please do not change its signature in the starter code. include as many helper functions as you wish.
+   \end{itemize}
+   
+\textbf{Write-up}: in your \verb|ps1sol.pdf/ps1sol.tex| files, briefly and informally argue why your code is correct, and has the desired runtime.
+
+
+
+\end{enumerate}
+%%Write your solution here
+\begin{verbatim}
+  Brief arguement on why solve_moving_min is correct and insert and get_min is O(lgn).
+
+	           solving_moving_min uses a min-Heap, the first thing it does is create a heap, h = Heap().
+	In the commands list, when it says to insert, solving_moving_min calls h.insert(x), 
+	where x is the number to insert. 
+
+	           The Heap creates a list and when insert is called, if the list is empty it appends the
+	 element into the empty list. O(1)
+
+	           If the list is not empty, the Heap appends the element to the end of the list,
+	then calls the bubble_up function with parameter, size of the list. 
+	The bubble up function takes i (the index where the new element just got appended)
+	and while i//2 is not 0 it checks if the node at position i is smaller than its parent node at i//2,
+	 if it is swap them. i divides by two. 
+
+	           The reason why the while loop is i//2 >0 is because if i is 0 then
+	we are already at the root node and can't go back any furthar, otherwise go back to i's
+	 parent (this is what the while loop and i=i//2 do).
+	
+	           Index i traverses through the tree going from child to parent, from the bottom most leaf 
+	to the root. So it traverses the height of the tree, since the Heap is a balanced binary tree,
+	 we are traversing logn steps. So, O(lgn)
+
+	get_min is called everytime it appears in the command list. It returns the smallest i'th node in the heap.
+	In get_min if it the first smallest node it simply returns the root of the heap. O(1)
+
+	           Otherwise, it checks which level (height) of the tree the i'th smallest node will appear.
+	 It does this by checking if i > 2^(count+1)-1 where count is a counter (from 0) and if that 
+	condition is true count is increased by one. since 2^(count+1)-1 gives the number of nodes in a balanced 
+	binary tree where count is the level  if i <= 2^(count+1)-1 then i is at that level. This takes lgn steps as
+	it goes through the height which is lgn (n is nodes).
+
+
+
+
+
+
+
+	     Next it stores that level of the tree in a list and sorts it which is O(nlgn), 
+	but since it occurs only on s nodes where s is the number of nodes in that level:
+
+
+	                     |
+	                |         |     ---> In this level s is 2
+	this takes O(lgn) time. it returns the node at the appropriate index, returning i'th smallest.
+
+	So in total get_min takes lgn+lgn time which is O(lgn).
+
+
+
+\end{verbatim}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,38 @@
+breif arguement on why solve_moving_min is correct and insert and get_min is O(lgn).
+
+solving_moving_min uses a min-Heap, the first thing it does is create a heap, h = Heap().
+In the commands list, when it says to insert, solving_moving_min calls h.insert(x), 
+where x is the number to insert. 
+
+The Heap creates a list and when insert is called, if the list is empty it appends the element into 
+the empty list. O(1)
+
+If the list is not empty, the Heap appends the element to the end of the list,
+then calls the bubble_up function with parameter, size of the list. 
+The bubble up function takes i (the index where the new element just got appended)
+and while i//2 is not 0 it checks if the node at position i is smaller than its parent node at i//2. And if it is
+swap them. i decreases by 2 each time. The reason why the while loop is i//2 >0 is because if i is 0 then
+we are already at the root node and can't go back any furthar, otherwise go back to i's parent (this is what
+the while loop and i=i//2 do).
+Index i traverses through the tree going from child to parent, from the bottom most leaf to the root. 
+So it traverses the height of the tree, since the Heap is a balanced binary tree, we are traversing logn steps.
+So, O(lgn)
+
+get_min is called everytime it appears in the command list. It returns the smallest i'th node in the heap.
+In get_min if it the first smallest node it simply returns the root of the heap. O(1)
+
+Otherwise, it checks which level (height) of the tree the i'th smallest node will appear. It does this by checking
+if i > 2^(count+1)-1 where count is a counter (from 0) and if that condition is true count is increased by one.
+since 2^(count+1)-1 gives the number of nodes in a ballanced binary tree where count is the level 
+if i <= 2^(count+1)-1 then i is at that level. This takes lgn steps as it goes through the height which is lgn (n is nodes).
+
+next it stores that level of the tree in a list
+and sorts it which is O(nlgn), but since it occurs only on s nodes where s is the number of nodes in that level:
+
+		|
+	|		|     ---> In this level s is 2
+this takes O(lgn) time. it returns the node at the appropriate index, returning i'th smallest.
+
+So in total get_min takes lgn+lgn time which is O(lgn).
+
+
