@@ -17,7 +17,7 @@ class vertex:
   
   def add_neighbour(self, v):
     #neighbour_set = set(self.neighbours)
-    print("hmm??"+str(self.neighbours))
+    #print("hmm??"+str(self.neighbours))
     if v not in self.neighbours:
       self.neighbours.append(v)
       self.neighbours.sort(key=lambda x:x.name, reverse=False)
@@ -63,7 +63,7 @@ class graph:
     
   def print_g(self):
     for k,v in self.vertices.items():
-      print(k+ ": ")
+      print(k+ ": diistance is"+ str(v.d) )
       for j in v.neighbours:
         print("    "+j.name)
   
@@ -76,7 +76,7 @@ class graph:
     global l
     self.l.append(v.name)
     
-    print(v.name)
+    #print(v.name)
     
     for x in v.neighbours:
       if self.vertices[x.name].colour == 'white':
@@ -101,7 +101,74 @@ class graph:
     
     self.l = []
     return s
+  
+  def bfs_dist(self, initial):
+    queue = []
+    self.vertices[initial].d = 0
+    self.vertices[initial].colour = 'gray'
     
+    queue.append(self.vertices[initial])
+    #for j in self.vertices[initial].neighbours:
+      #j.d = self.vertices[initial].d + 1
+      #queue.append(j)
+    
+    while len(queue) > 0:
+      node = queue.pop(0)
+      node.colour = 'gray'
+      
+      for k in node.neighbours:
+        if k.colour =='white':
+          queue.append(k)
+          #if k.d > node.d + 1:
+          k.d = node.d + 1
+          print(k.name + " dist " + str(k.d))
+          
+            
+      
+  def bfs(self,begining, end):
+    queue = []
+    self.vertices[begining].d = 0
+    self.vertices[begining].colour = 'gray'
+
+    if begining == end:
+      return [[begining]]
+    
+    queue.append(self.vertices[begining].neighbours)
+    
+    while queue != []:
+      
+          
+      path = queue.pop(0)
+
+      #print path
+      tp = []
+      for x in path:
+        tp.append(x.name)
+        
+      print(tp)
+      last = path[-1]
+      #print(last.name)
+
+      
+      for next_to in last.neighbours:
+        print(next_to.name)
+        if next_to.colour == 'white':
+          new_p = list(path)
+          new_p.append(next_to)
+          queue.append(new_p)
+          if next_to.name == end:
+            tp = []
+            for x in new_p:
+              tp.append(x.name)               
+            return new_p
+          
+          if next_to.d > last.d + 1:
+            next_to.d  = last.d + 1           
+      
+      
+      
+      
+      
       
   
   
@@ -121,41 +188,62 @@ def solve_party(commands):
     if l[0] == 'tell':
       if l[2] in graph_students.vertices and l[1] in graph_students.vertices:
         if l[1] in graph_students.dfs(graph_students.vertices[l[2]]) or l[2] in graph_students.dfs(graph_students.vertices[l[1]]):
-          c1 = check_distance(l, graph_students,1)
-          c2 = check_distance(l, graph_students,2)
-          
-          if c1 < c2:
-            if c1 % 2 == 0:
-              com = 'same'
-            else:
-              com = 'different'
-              
-          elif c1 > c2:
-            if c2 % 2 == 0:
-              com = 'same'
-            else:
-              com = 'different'
-          elif c1 == c2:
-            if c2 % 2 == 0:
-              com = 'same'
-            else:
-              com = 'different'
+          graph_students.bfs_dist(l[1])
+          if graph_students.vertices[l[2]].d % 2 == 0 and graph_students.vertices[l[2]].d != 0:
+            com = 'same'
+          else:
+            com = 'different'
         else:
-          com = 'unknown'          
+          com = 'unknown'  
+          
       else:
         com = 'unknown'
-          
+      
+      
+      for keys, values in graph_students.vertices.items():
+        values.d = 0      
+        values.colour = 'white'
       ret.append(com)
       
       
     elif l[0] == 'add':
-      s1 = vertex(l[1])
-      s2 = vertex(l[2])
-      graph_students.add_vertex(s1)
-      graph_students.add_vertex(s2)
-      graph_students.add_edge(s1, s2)
+      if l[1] not in graph_students.vertices:
+        s1 = vertex(l[1])
+        graph_students.add_vertex(s1)
+        
+      if l[2] not in graph_students.vertices:
+        s2 = vertex(l[2])
+        graph_students.add_vertex(s2)
+      graph_students.add_edge(graph_students.vertices[l[1]],graph_students.vertices[l[2]])
       
   return ret
+
+def check(l,g):
+  for x in l:
+    k = x.split()
+    if(k[0] == 'add'):
+      if k[1] not in g.vertices:
+        s1 = vertex(k[1])
+        g.add_vertex(s1)
+        
+      if k[2] not in g.vertices:
+        s2 = vertex(k[2])
+        g.add_vertex(s2)
+        
+        
+      g.add_edge(g.vertices[k[1]],g.vertices[k[2]])
+    else:
+      pass    
+      #bfs_ret = g.bfs(l[1],l[2])
+      #c1 = len(bfs_ret)
+      #if c1 % 2 == 0:
+        #com = 'same'
+      #else:
+        #com = 'different'      
+    
+
+  
+  
 
 def check_distance(l,graph_students,num):
   dfs_ret = []
@@ -186,7 +274,6 @@ def check_distance(l,graph_students,num):
   
 
 if __name__ == '__main__':
- # pass
   #pass
   # some small test cases
   # Case 1
